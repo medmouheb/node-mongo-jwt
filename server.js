@@ -34,8 +34,8 @@ const Role = db.role;
 
 db.mongoose
   .connect(
-    // `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
-    "mongodb+srv://mohamedmouheb:bLIRw4DXLTDWVDVa@cluster0.kugwfsv.mongodb.net/smartMadinaty?retryWrites=true&w=majority"
+    `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
+    // "mongodb+srv://mohamedmouheb:bLIRw4DXLTDWVDVa@cluster0.kugwfsv.mongodb.net/smartMadinaty?retryWrites=true&w=majority"
     ,
    {
     useNewUrlParser: true,
@@ -58,6 +58,7 @@ app.get("/", (req, res) => {
 // routes
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/lamppost.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
