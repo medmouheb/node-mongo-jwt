@@ -34,8 +34,8 @@ const Role = db.role;
 
 db.mongoose
   .connect(
-    `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
-    // "mongodb+srv://mohamedmouheb:bLIRw4DXLTDWVDVa@cluster0.kugwfsv.mongodb.net/smartMadinaty?retryWrites=true&w=majority"
+    // `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`
+    "mongodb+srv://mohamedmouheb:bLIRw4DXLTDWVDVa@cluster0.kugwfsv.mongodb.net/smartMadinaty?retryWrites=true&w=majority"
     ,
    {
     useNewUrlParser: true,
