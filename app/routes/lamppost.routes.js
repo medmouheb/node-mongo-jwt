@@ -1,5 +1,5 @@
 const controller = require("../controllers/lamppost.controller");
-const { authJwt } = require("../middlewares");
+const { authJwt,upload } = require("../middlewares");
 
 
 module.exports = function(app) {
@@ -11,7 +11,7 @@ module.exports = function(app) {
       next();
     });
   
-    app.post("/api/lamppost/create", [authJwt.verifyToken,authJwt.isAdmin] , controller.createLamppost);
+    app.post("/api/lamppost/create", [authJwt.verifyToken,authJwt.isAdmin ,upload.array('images', 5)] , controller.createLamppost);
 
     
 

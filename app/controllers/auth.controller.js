@@ -7,9 +7,13 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
+  const photo = req.file.filename;
+   
+  
   const user = new User({
     username: req.body.username,
     email: req.body.email,
+    avatar:photo,
     password: bcrypt.hashSync(req.body.password, 8),
   });
 

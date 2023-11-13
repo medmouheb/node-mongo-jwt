@@ -3,6 +3,10 @@ const Lamppost = db.lamppost;
 
 
 exports.createLamppost = (req, res) => {
+    const images = req.files.map((file) => ({
+        data: file.buffer,
+        contentType: file.mimetype,
+    }));
     const lamppost = new Lamppost({
         address: {
             country: req.body.address.country,
@@ -11,6 +15,7 @@ exports.createLamppost = (req, res) => {
             street: req.body.address.street,
             areaCode: req.body.address.areaCode
         },
+        images,
         longitude: req.body.longitude,
         latitude: req.body.latitude,
         isWorking: req.body.isWorking
@@ -31,6 +36,7 @@ exports.getById = async (req, res) => {
     try {
         const lamppost = await Lamppost.findById(_id);
         if (!lamppost) {
+            
             return res.status(404).send();
         }
         res.send(lamppost);

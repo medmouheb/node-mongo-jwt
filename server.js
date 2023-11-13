@@ -1,10 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
+const path = require('path');
 
 const dbConfig = require("./app/config/db.config");
 
 const app = express();
+
+const imageDirectory = path.join(__dirname, 'app/uploads');
+
 
 app.use(cors());
 /* for Angular Client (withCredentials) */
@@ -56,9 +60,18 @@ app.get("/", (req, res) => {
 });
 
 // routes
+app.get('/api/images/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const imagePath = path.join(imageDirectory, filename);
+
+  res.sendFile(imagePath);
+});
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/lamppost.routes")(app);
+require("./app/routes/claim.routes")(app);
+require("./app/routes/store.routes")(app);
+
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

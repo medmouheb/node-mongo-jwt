@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const Lamppost = mongoose.model(
   "Lamppost",
   new mongoose.Schema({
+    name:String,
     address: {
         country:String,
         state:String,
@@ -10,9 +11,15 @@ const Lamppost = mongoose.model(
         street:String,
         areaCode:String
     },
+    images: [
+      {
+        data: Buffer,
+        contentType: String,
+      },
+    ],
     longitude: Number,
     latitude:Number,
-    isWorking: Boolean
+    status: String
   })
 );
 
