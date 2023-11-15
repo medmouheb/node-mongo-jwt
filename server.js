@@ -2,13 +2,18 @@ const express = require("express");
 const cors = require("cors");
 const cookieSession = require("cookie-session");
 const path = require('path');
-
+const http = require('http');  
+const socketIO = require('socket.io');  
 const dbConfig = require("./app/config/db.config");
 
 const app = express();
+const server = http.createServer(app);  
 
+const io = socketIO(server);  
 const imageDirectory = path.join(__dirname, 'app/uploads');
 
+
+let arr=[{id:1,cordinations:[10.165621999999999,35.966705000000005] } , {id:2,cordinations:[10.167133,35.967172000000005]}]
 
 app.use(cors());
 /* for Angular Client (withCredentials) */
@@ -76,9 +81,31 @@ require("./app/routes/trash.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+server.listen(PORT, () => {  // Change this line
   console.log(`Server is running on port ${PORT}.`);
 });
+
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Send array every second
+  setInterval(() => {
+    const updatedArray = yourUpdateLogic();  // Implement your logic here
+    socket.emit('updateArray', updatedArray);
+  }, 1000);
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+function yourUpdateLogic() {
+
+  arr= arr.map(item => ({
+    id: item.id,
+    cordinations: [item.cordinations[0] + 0.0001, item.cordinations[1]+ 0.0001]
+  }));
+  return arr
+}
 
 function initial() {
   Role.estimatedDocumentCount((err, count) => {
