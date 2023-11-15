@@ -2,20 +2,61 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
-
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
+const sendVerificationEmail = async (email, verificationToken) => {
+  //create a nodemailer transporter
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "rahmeniborhen7@gmail.com",
+      pass: "roawnkrojkxppxwm",
+    },
+  });
+
+  //compose the email message
+  const mailOptions = {
+    from: "threads.com",
+    to: email,
+    subject: "Email Verification",
+    text: `please click the following link to verify your email http://localhost:8080/verify/${verificationToken}`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.log("error sending email", error);
+  }
+};
+
 exports.signup = (req, res) => {
-  const photo = req.file.filename;
+  let photo 
+  let user
+  try {
+     photo = req.file.filename;
+    user = new User({
+      username: req.body.username,
+      email: req.body.email,
+      avatar:photo,
+      password: bcrypt.hashSync(req.body.password, 8),
+      verificationToken : crypto.randomBytes(20).toString("hex")
+    });
+  } catch (error) {
+    user = new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 8),
+      verificationToken : crypto.randomBytes(20).toString("hex")
+    });
+  }
    
   
-  const user = new User({
-    username: req.body.username,
-    email: req.body.email,
-    avatar:photo,
-    password: bcrypt.hashSync(req.body.password, 8),
-  });
+ 
+  sendVerificationEmail(user.email, user.verificationToken);
 
   user.save((err, user) => {
     if (err) {

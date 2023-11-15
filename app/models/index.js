@@ -10,6 +10,7 @@ db.role = require("./role.model");
 db.lamppost = require("./lamppost.model");
 db.claim = require("./claim.model");
 db.trash = require("./trash.model");
+db.gasStation = require("./gasStation.model");
 
 
 
