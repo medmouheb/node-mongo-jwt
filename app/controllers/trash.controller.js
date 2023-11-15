@@ -1,10 +1,10 @@
 const db = require("../models");
-const Lamppost = db.lamppost;
+const Trash = db.trash;
 
 
-exports.createLamppost = (req, res) => {
+exports.createTrash = (req, res) => {
 
-    const lamppost = new Lamppost({
+    const trash = new Trash({
         address: {
             country: req.body.address.country,
             state: req.body.address.state,
@@ -14,15 +14,16 @@ exports.createLamppost = (req, res) => {
         },
         longitude: req.body.longitude,
         latitude: req.body.latitude,
-        status: req.body.status
+        status: req.body.status,
+        name:req.body.name
     })
 
-    lamppost.save((err, user) => {
+    trash.save((err, user) => {
         if (err) {
             res.status(500).send({ message: err });
             return;
         } else {
-            return res.status(200).send({ message: "Lamppost Created" });
+            return res.status(200).send({ message: "Trash Created" });
         }
     })
 }
@@ -30,12 +31,12 @@ exports.createLamppost = (req, res) => {
 exports.getById = async (req, res) => {
     const _id = req.query.id;
     try {
-        const lamppost = await Lamppost.findById(_id);
-        if (!lamppost) {
+        const trash = await Trash.findById(_id);
+        if (!trash) {
             
             return res.status(404).send();
         }
-        res.send(lamppost);
+        res.send(trash);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -43,14 +44,14 @@ exports.getById = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const lamppost = await Lamppost.findByIdAndUpdate(_id, req.body, {
+        const trash = await Trash.findByIdAndUpdate(_id, req.body, {
             new: true,
             runValidators: true,
         });
-        if (!lamppost) {
+        if (!trash) {
             return res.status(404).send();
         }
-        res.send(lamppost);
+        res.send(trash);
     } catch (error) {
         res.status(400).send(error);
     }
@@ -59,11 +60,11 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
     const _id = req.params.id;
     try {
-        const lamppost = await Lamppost.findByIdAndDelete(_id);
-        if (!lamppost) {
+        const trash = await Trash.findByIdAndDelete(_id);
+        if (!trash) {
             return res.status(404).send();
         }
-        res.send(lamppost);
+        res.send(trash);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -75,16 +76,16 @@ exports.getPages = async (req, res) => {
     const skip = (page - 1) * limit;
 
     try {
-        const totalRecords = await Lamppost.countDocuments();
+        const totalRecords = await Trash.countDocuments();
         const totalPages = Math.ceil(totalRecords / limit);
 
-        const lamppost = await Lamppost.find()
+        const trash = await Trash.find()
             .skip(skip)
             .limit(limit)
             .exec();
 
         const response = {
-            lamppost,
+            trash,
             pagination: {
                 currentPage: page,
                 totalPages,
@@ -112,7 +113,7 @@ exports.search = async (req, res) => {
         ],
     };
 
-    Lamppost.find(query, (err, results) => {
+    Trash.find(query, (err, results) => {
         if (err) {
             res.status(500).send(err);
 

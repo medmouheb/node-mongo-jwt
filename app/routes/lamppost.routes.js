@@ -11,7 +11,7 @@ module.exports = function(app) {
       next();
     });
   
-    app.post("/api/lamppost/create", [authJwt.verifyToken,authJwt.isAdmin ,upload.array('images', 5)] , controller.createLamppost);
+    app.post("/api/lamppost/create", [authJwt.verifyToken,authJwt.isAdmin ] , controller.createLamppost);
 
     
 

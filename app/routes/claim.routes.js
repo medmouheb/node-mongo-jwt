@@ -1,6 +1,17 @@
 const controller = require("../controllers/claim.controller");
-const { authJwt,upload } = require("../middlewares");
+const { authJwt } = require("../middlewares");
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, 'app/uploads/'); // Define the directory where uploaded images will be stored
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 module.exports = function(app) {
     app.use(function(req, res, next) {

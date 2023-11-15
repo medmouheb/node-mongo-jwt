@@ -71,6 +71,7 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/lamppost.routes")(app);
 require("./app/routes/claim.routes")(app);
 require("./app/routes/store.routes")(app);
+require("./app/routes/trash.routes")(app);
 
 
 // set port, listen for requests

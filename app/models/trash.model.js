@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const Lamppost = mongoose.model(
-  "Lamppost",
+const Trash = mongoose.model(
+  "Trash",
   new mongoose.Schema({
     name:String,
     address: {
@@ -13,8 +13,9 @@ const Lamppost = mongoose.model(
     },
     longitude: Number,
     latitude:Number,
-    status: String
+    status: Number,
+
   })
 );
 
-module.exports = Lamppost;
+module.exports = Trash;

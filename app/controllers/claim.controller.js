@@ -3,18 +3,22 @@ const Claim = db.claim;
 
 
 exports.createClaim = (req, res) => {
-    const { title, description, entityType, entityId } = req.body;
-    const images = req.files.map((file) => ({
-        data: file.buffer,
-        contentType: file.mimetype,
-    }));
-
+    const { address, description, entityType, entityReference } = req.body;
+    const images = req.files.map((file) => (
+        file.filename
+    ));
     const newClaim = new Claim({
-        title,
+        address: {
+            country: req.body["address.country"],
+            state: req.body["address.state"],
+            city: req.body["address.city"],
+            street: req.body["address.street"],
+            areaCode: req.body["address.areaCode"]
+        },
         description,
         images,
         entityType,
-        entityReference: entityId,
+        entityReference: entityReference,
     });
 
     newClaim

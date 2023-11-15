@@ -1,14 +1,18 @@
 const mongoose = require('mongoose');
 
 const claimSchema = new mongoose.Schema({
-  title: String,
   description: String,
-  images: [
-    {
-      data: Buffer,
-      contentType: String,
-    },
-  ],
+  images: {
+    type: [String], 
+    default: [],    
+  },
+  address: {
+    country:String,
+    state:String,
+    city:String,
+    street:String,
+    areaCode:String
+},
   entityReference: {
     type: mongoose.Schema.Types.ObjectId,
     ref: function() {
