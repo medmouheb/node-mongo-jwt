@@ -36,6 +36,26 @@ app.get("/user/:userId", (req, res) => {
       res.status(500).json({ message: "error in following a user" });
     }
   });
+
+  app.get("/verify/:token", async (req, res) => {
+    try {
+      const token = req.params.token;
+  
+      const user = await User.findOne({ verificationToken: token });
+      if (!user) {
+        return res.status(404).json({ message: "Invalid token" });
+      }
+  
+      user.verified = true;
+      user.verificationToken = undefined;
+      await user.save();
+  
+      res.status(200).json({ message: "Email verified successfully" });
+    } catch (error) {
+      console.log("error getting token", error);
+      res.status(500).json({ message: "Email verification failed" });
+    }
+  });
   
   //endpoint to unfollow a user
   app.post("/users/unfollow", async (req, res) => {
@@ -139,7 +159,7 @@ app.get("/user/:userId", (req, res) => {
   app.get("/get-posts", async (req, res) => {
     try {
       const posts = await Post.find()
-        .populate("user", "name")
+        .populate("user", "username avatar id" )
         .sort({ createdAt: -1 });
   
       res.status(200).json(posts);

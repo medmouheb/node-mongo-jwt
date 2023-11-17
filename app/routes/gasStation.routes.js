@@ -25,6 +25,7 @@ module.exports = function(app) {
     app.post("/api/gasstation/create", [upload.array('images', 5)] , controller.createGasStation);
 
     app.get("/api/gasstation/getbyid", controller.getById);
+    app.get("/api/gasstation/search", controller.search);
 
 
   };

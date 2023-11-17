@@ -28,6 +28,25 @@ const User = mongoose.model(
       default: false,
     },
     verificationToken: String,
+    address: {
+      country: String,
+      state: String,
+      city: String,
+      street: String,
+      areaCode: String
+    },
+    phone: {
+      type: String
+    },
+    firstName: {
+      type: String
+    },
+    lastName: {
+      type: String
+    },
+    gender: {
+      type: String
+    }
 
   })
 );

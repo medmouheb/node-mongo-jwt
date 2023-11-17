@@ -34,28 +34,28 @@ const sendVerificationEmail = async (email, verificationToken) => {
 };
 
 exports.signup = (req, res) => {
-  let photo 
+  let photo
   let user
   try {
-     photo = req.file.filename;
+    photo = req.file.filename;
     user = new User({
       username: req.body.username,
       email: req.body.email,
-      avatar:photo,
+      avatar: photo,
       password: bcrypt.hashSync(req.body.password, 8),
-      verificationToken : crypto.randomBytes(20).toString("hex")
+      verificationToken: crypto.randomBytes(20).toString("hex"),
     });
   } catch (error) {
     user = new User({
       username: req.body.username,
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 8),
-      verificationToken : crypto.randomBytes(20).toString("hex")
+      verificationToken: crypto.randomBytes(20).toString("hex")
     });
   }
-   
-  
- 
+
+
+
   sendVerificationEmail(user.email, user.verificationToken);
 
   user.save((err, user) => {
@@ -109,7 +109,7 @@ exports.signup = (req, res) => {
 
 exports.signin = (req, res) => {
   User.findOne({
-    username: req.body.username,
+    email: req.body.email,
   })
     .populate("roles", "-__v")
     .exec((err, user) => {
@@ -142,7 +142,7 @@ exports.signin = (req, res) => {
       var authorities = [];
 
       for (let i = 0; i < user.roles.length; i++) {
-        authorities.push( user.roles[i].name);
+        authorities.push(user.roles[i].name);
       }
 
       req.session.token = token;
@@ -152,6 +152,7 @@ exports.signin = (req, res) => {
         username: user.username,
         email: user.email,
         roles: authorities,
+        avatar: user.avatar,
         token
       });
     });
@@ -165,3 +166,48 @@ exports.signout = async (req, res) => {
     this.next(err);
   }
 };
+
+
+exports.updateProfile = async (req, res) => {
+console.log(req.body)
+  try {
+    const userId = req.body.id;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    try {
+      photo = req.file.filename;
+    } catch (error) {
+      console.log("no avatar update")
+    }
+
+    user.username= req.body.username
+    user.email= req.body.email
+    user.avatar= photo
+
+    user.address= {
+      country: req.body["address.country"],
+      state: req.body["address.state"],
+      city: req.body["address.city"],
+      street: req.body["address.street"],
+      areaCode: req.body["address.areaCode"],
+    }
+    user.phone= req.body.phone
+    user.firstName= req.body.firstName
+    user.lastName= req.body.lastName
+    user.gender=req.body.gender
+
+    await user.save()
+
+    return           res.send({ message: "User was registered successfully!" });
+
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: "Error while getting the profile" });
+  }
+  
+}

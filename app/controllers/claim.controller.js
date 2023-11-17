@@ -3,7 +3,8 @@ const Claim = db.claim;
 
 
 exports.createClaim = (req, res) => {
-    const { address, description, entityType, entityReference } = req.body;
+    const { address, description, entityType, entityReference,user } = req.body;
+    console.log({ address, description, entityType, entityReference,user })
     const images = req.files.map((file) => (
         file.filename
     ));
@@ -19,6 +20,7 @@ exports.createClaim = (req, res) => {
         images,
         entityType,
         entityReference: entityReference,
+        user:user
     });
 
     newClaim
