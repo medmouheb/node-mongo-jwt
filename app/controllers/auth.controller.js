@@ -34,6 +34,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
 };
 
 exports.signup = (req, res) => {
+  console.log("hhhh")
   let photo
   let user
   try {
@@ -55,8 +56,11 @@ exports.signup = (req, res) => {
   }
 
 
-
+try {
   sendVerificationEmail(user.email, user.verificationToken);
+} catch (error) {
+   console.log(error.message);  
+}
 
   user.save((err, user) => {
     if (err) {
@@ -181,13 +185,13 @@ console.log(req.body)
 
     try {
       photo = req.file.filename;
+      user.avatar= photo
     } catch (error) {
       console.log("no avatar update")
     }
 
     user.username= req.body.username
     user.email= req.body.email
-    user.avatar= photo
 
     user.address= {
       country: req.body["address.country"],

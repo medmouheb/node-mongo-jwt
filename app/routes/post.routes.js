@@ -72,7 +72,7 @@ app.get("/user/:userId", (req, res) => {
     }
   });
   
-  //endpoint to create a new post in the backend
+  //endpoint to create a new post in the BACKEND
   //done
   app.post("/create-post", async (req, res) => {
     try {
@@ -183,6 +183,23 @@ app.get("/user/:userId", (req, res) => {
       return res.status(200).json({ user });
     } catch (error) {
       res.status(500).json({ message: "Error while getting the profile" });
+    }
+  });
+
+  app.get("/user/:userId", (req, res) => {
+    try {
+      const loggedInUserId = req.params.userId;
+  
+      User.find({ _id: { $ne: loggedInUserId } })
+        .then((users) => {
+          res.status(200).json(users);
+        })
+        .catch((error) => {
+          console.log("Error: ", error);
+          res.status(500).json("errror");
+        });
+    } catch (error) {
+      res.status(500).json({ message: "error getting the users" });
     }
   });
 }
