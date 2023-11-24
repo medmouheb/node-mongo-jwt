@@ -95,6 +95,8 @@ require("./app/routes/claim.routes")(app);
 require("./app/routes/store.routes")(app);
 require("./app/routes/trash.routes")(app);
 require("./app/routes/gasStation.routes")(app);
+require("./app/routes/organisation.routes")(app);
+require("./app/routes/doctor.routes")(app);
 require("./app/routes/post.routes")(app);
 
 
